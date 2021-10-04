@@ -14,8 +14,14 @@ const uri = "mongodb+srv://sachin:sachin721@cluster0.qcgao.mongodb.net";
       // Make the appropriate DB calls
       // await  listDatabases(client);
       router.get('/', function(req, res, next) {
-        var result = client.db('onlineTest').collection('result').find({correctAnswer: 23}).toArray(function(err, result){return result})
-        res.json(JSON.stringify(result));
+        var result = client.db('onlineTest').collection('questions').find({})
+        .toArray(function(err, result){
+          console.log(result)
+          //return result
+          res.header('Cache-Control', 'no-cache, no-store, must-revalidate')
+          res.json(result)
+        })
+        
       });
 
   } catch (e) {
