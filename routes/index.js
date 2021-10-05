@@ -19,31 +19,36 @@ try {
   });
 
   router.post('/submit', function (req, res, next) {
-    client.db('onlineTest').collection('answers').find({}).toArray(function (err, answers) {
-      //var answers = result;
-      var correctAns = 0;
-      var inCorrectAns = 0;
-      var totalQuestions = req.body.length
-
-      req.body.map(function (ele, index) {
-        var checkAns = answers.find(function (item, index) {
-          return item.id === ele.id && item.ansKey === ele.selectedAns
+    try{
+      client.db('onlineTest').collection('answers').find({}).toArray(function (err, answers) {
+        //var answers = result;
+        var correctAns = 0;
+        var inCorrectAns = 0;
+        var totalQuestions = req.body.length
+  
+        req.body.map(function (ele, index) {
+          var checkAns = answers.find(function (item, index) {
+            return item.id === ele.id && item.ansKey === ele.selectedAns
+          })
+          if (checkAns) {
+            correctAns = correctAns + 1
+          } else {
+            inCorrectAns = inCorrectAns + 1
+          }
         })
-        if (checkAns) {
-          correctAns = correctAns + 1
-        } else {
-          inCorrectAns = inCorrectAns + 1
-        }
+  
+        var percent = (correctAns / totalQuestions) * 100;
+        //return result
+  
+        client.db('onlineTest').collection('result').updateOne({ _id: '615c2c8f27405f319d23fad4' }, { $set: { correctAns, inCorrectAns, percent } }).finally(function () {
+          res.json({ correctAns, inCorrectAns, percent })
+        })
+  
       })
-
-      var percent = (correctAns / totalQuestions) * 100;
-      //return result
-
-      client.db('onlineTest').collection('result').updateOne({ _id: '615c2c8f27405f319d23fad4' }, { $set: { correctAns, inCorrectAns, percent } }).finally(function () {
-        res.json({ correctAns, inCorrectAns, percent })
-      })
-
-    })
+    } catch(err){
+      res.json(err)
+    }
+    
   });
 
 
