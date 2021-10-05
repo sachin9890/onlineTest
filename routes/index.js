@@ -19,13 +19,14 @@ try {
   });
 
   router.post('/submit', function (req, res, next) {
+      var requestPayload = req.body
       client.db('onlineTest').collection('answers').find({}).toArray(function (err, answers) {
         //var answers = result;
         var correctAns = 0;
         var inCorrectAns = 0;
-        var totalQuestions = req.body.length
+        var totalQuestions = requestPayload.length
   
-        req.body.map(function (ele, index) {
+        requestPayload.map(function (ele, index) {
           var checkAns = answers.find(function (item, index) {
             return item.id === ele.id && item.ansKey === ele.selectedAns
           })
