@@ -14,10 +14,8 @@ const client = new MongoClient(uri, { useNewUrlParser: true });
       router.get('/', function(req, res, next) {
         var result = client.db('onlineTest').collection('questions').find({})
         .toArray(function(err, result){
-          console.log(result)
-          //return result
           res.header('Cache-Control', 'no-cache, no-store, must-revalidate')
-          res.json(result)
+          res.json({'data': result})
         })
         
       });
