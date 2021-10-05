@@ -19,7 +19,6 @@ try {
   });
 
   router.post('/submit', function (req, res, next) {
-    try{
       client.db('onlineTest').collection('answers').find({}).toArray(function (err, answers) {
         //var answers = result;
         var correctAns = 0;
@@ -45,9 +44,7 @@ try {
         })
   
       })
-    } catch(err){
-      res.json(err)
-    }
+    
     
   });
 
