@@ -9,8 +9,6 @@ try {
   // Connect to the MongoDB cluster
   client.connect();
 
-  // Make the appropriate DB calls
-  // await  listDatabases(client);
   router.get('/', function (req, res, next) {
     var result = client.db('onlineTest').collection('questions').find({})
       .toArray(function (err, result) {
